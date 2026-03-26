@@ -17,10 +17,26 @@ BASE_DIR = pathlib.Path(__file__).parent.resolve()
 MODEL_PATH = os.path.join(BASE_DIR, "hand_landmarker.task")
 
 # 3. WEB_RTC CONFIG
-RTC_CONFIG = RTCConfiguration(
-    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"]}]}
-)
-
+RTC_CONFIG = RTCConfiguration({
+    "iceServers": [
+        {"urls": ["stun:stun.l.google.com:19302"]},
+        {
+            "urls": ["turn:openrelay.metered.ca:80"],
+            "username": "openrelayproject",
+            "credential": "openrelayproject",
+        },
+        {
+            "urls": ["turn:openrelay.metered.ca:443"],
+            "username": "openrelayproject",
+            "credential": "openrelayproject",
+        },
+        {
+            "urls": ["turn:openrelay.metered.ca:443?transport=tcp"],
+            "username": "openrelayproject",
+            "credential": "openrelayproject",
+        },
+    ]
+})
 class TremorProcessor(VideoProcessorBase):
     def __init__(self):
         from mediapipe.tasks import python as mp_python
@@ -78,5 +94,5 @@ else:
         rtc_configuration=RTC_CONFIG,
         video_processor_factory=TremorProcessor,
         media_stream_constraints={"video": True, "audio": False},
-        async_processing=True,
+        async_processing=False,
     )
