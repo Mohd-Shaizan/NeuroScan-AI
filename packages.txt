@@ -5,3 +5,5 @@ libxext6
 libxrender1
 libasound2
 libgles2
+libegl1
+libusb-1.0-0
