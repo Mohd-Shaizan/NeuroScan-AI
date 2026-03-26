@@ -42,18 +42,18 @@ class TremorProcessor:
         self.landmarker = mp_vision.HandLandmarker.create_from_options(options)
 
     def recv(self, frame):
-        img = frame.to_ndarray(format="bgr24")
+         img = frame.to_ndarray(format="bgr24")
         
         if self.landmarker is None:
             return frame.from_ndarray(img, format="bgr24")
-
-        # Process Frame
+    
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=img_rgb)
-        timestamp_ms = int(frame.pts * 1000 / frame.time_base.denominator)
         
-        result = self.landmarker.detect_for_video(mp_image, timestamp_ms)
+        # ✅ Correct timestamp calculation
+        timestamp_ms = int(frame.pts * float(frame.time_base) * 1000)
         
+        result = self.landmarker.detect_for_video(mp_image, timestamp_ms)        
         # Draw Landmarks
         if result.hand_landmarks:
             for landmarks in result.hand_landmarks:
