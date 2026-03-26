@@ -88,11 +88,12 @@ if not os.path.exists(MODEL_PATH):
     st.error(f"Missing File: hand_landmarker.task not found!")
     st.info("Ensure the file is in the root of your GitHub repo.")
 else:
+    # Change async_processing to True at the bottom of your app.py
     webrtc_streamer(
-        key="neuroscan",
+        key="neuroscan-v2", # Changing the key helps reset the state
         mode=WebRtcMode.SENDRECV,
         rtc_configuration=RTC_CONFIG,
         video_processor_factory=TremorProcessor,
         media_stream_constraints={"video": True, "audio": False},
-        async_processing=False,
+        async_processing=True, # Allows the AI to run without freezing the video
     )
