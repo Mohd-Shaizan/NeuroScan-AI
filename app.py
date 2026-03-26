@@ -42,7 +42,7 @@ class TremorProcessor:
         self.landmarker = mp_vision.HandLandmarker.create_from_options(options)
 
     def recv(self, frame):
-         img = frame.to_ndarray(format="bgr24")
+        img = frame.to_ndarray(format="bgr24")
         
         if self.landmarker is None:
             return frame.from_ndarray(img, format="bgr24")
