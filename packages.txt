@@ -7,3 +7,11 @@ libasound2
 libgles2
 libegl1
 libusb-1.0-0
+pkg-config
+libavformat-dev
+libavcodec-dev
+libavdevice-dev
+libavutil-dev
+libswscale-dev
+libswresample-dev
+libavfilter-dev
