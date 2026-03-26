@@ -2,7 +2,8 @@ import os
 import cv2
 import numpy as np
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
+
 import mediapipe as mp
 import pathlib
 
@@ -43,18 +44,11 @@ class TremorProcessor:
 
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
+        current_time = time.time()  # ← wall clock, no math needed
         
-        if self.landmarker is None:
-            return frame.from_ndarray(img, format="bgr24")
-    
-        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=img_rgb)
-        
-        # ✅ Correct timestamp calculation
-        timestamp_ms = int(frame.pts * float(frame.time_base) * 1000)
-        
-        result = self.landmarker.detect_for_video(mp_image, timestamp_ms)        
-        # Draw Landmarks
+        timestamp_ms = int(current_time * 1000)  # ← clean and correct
+        result = self.landmarker.detect_for_video(mp_image, timestamp_ms)        # Draw Landmarks
         if result.hand_landmarks:
             for landmarks in result.hand_landmarks:
                 for lm in landmarks:
