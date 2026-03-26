@@ -22,7 +22,7 @@ RTC_CONFIG = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"]}]}
 )
 
-class TremorProcessor:
+class TremorProcessor(VideoProcessorBase):
     def __init__(self):
         # Initialize MediaPipe once when the stream starts
         from mediapipe.tasks import python as mp_python
